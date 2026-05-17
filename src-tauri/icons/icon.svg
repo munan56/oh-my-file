@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="coloredBlur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.05" result="coloredBlur"/>
+      <feComposite in="coloredBlur" in2="SourceGraphic" operator="in" result="coloredBlur"/>
+      <feComposite in="coloredBlur" in2="SourceGraphic" operator="in" result="coloredBlur"/>
+    </filter>
+    <radialGradient id="highlight" cx="40%" cy="35%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Drop shadow -->
+  <ellipse cx="128" cy="132" rx="120" ry="120" fill="#000000" opacity="0.12"/>
+
+  <!-- Main circle background -->
+  <circle cx="128" cy="128" r="120" fill="#f7faff" filter="url(#shadow)"/>
+
+  <!-- Circle border -->
+  <circle cx="128" cy="128" r="120" fill="none" stroke="#e0ebff" stroke-width="2"/>
+
+  <!-- Inner shadow effect -->
+  <circle cx="128" cy="128" r="118" fill="none" stroke="#000000" stroke-width="1" opacity="0.05"/>
+
+  <!-- Highlight overlay -->
+  <circle cx="128" cy="128" r="60" fill="url(#highlight)"/>
+
+  <!-- Arrow 1 (Blue - top left, pointing right) -->
+  <!-- Arrow body -->
+  <rect x="50" y="68" width="50" height="18" rx="9" fill="#2473ff"/>
+
+  <!-- Arrow head (triangle) -->
+  <polygon points="102,68 102,86 118,77" fill="#2473ff"/>
+
+  <!-- Arrow 1 highlight -->
+  <rect x="52" y="70" width="45" height="8" rx="4" fill="#ffffff" opacity="0.6"/>
+
+  <!-- Arrow 2 (Cyan - bottom right, pointing left) -->
+  <!-- Arrow body -->
+  <rect x="156" y="154" width="50" height="18" rx="9" fill="#2fd0aa"/>
+
+  <!-- Arrow head (triangle, reversed) -->
+  <polygon points="154,154 154,172 138,163" fill="#2fd0aa"/>
+
+  <!-- Arrow 2 shadow -->
+  <rect x="156" y="175" width="50" height="3" rx="1.5" fill="#000000" opacity="0.15"/>
+
+  <!-- Center light glow -->
+  <circle cx="128" cy="85" r="45" fill="#ffffff" opacity="0.35" filter="url(#innerShadow)"/>
+
+  <!-- Outer glow -->
+  <circle cx="128" cy="128" r="120" fill="none" stroke="#2473ff" stroke-width="1" opacity="0.1"/>
+
+  <!-- Glow from cyan -->
+  <circle cx="181" cy="163" r="40" fill="#2fd0aa" opacity="0.08" filter="url(#innerShadow)"/>
+</svg>

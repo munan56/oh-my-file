@@ -90,147 +90,76 @@ jobs:
           asset_name: ${{ steps.assets.outputs.exe }}
           asset_content_type: application/octet-stream
 
-  build-macos:
-    name: Build macOS
-    needs: create-release
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # build-macos:
+  #   name: Build macOS
+  #   needs: create-release
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20'
 
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-apple-darwin,aarch64-apple-darwin
+  #     - name: Setup Rust
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         targets: x86_64-apple-darwin,aarch64-apple-darwin
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Build application
-        run: npm run package darwin
-        env:
-          CI: true
+  #     - name: Build application
+  #       run: npm run package darwin
+  #       env:
+  #         CI: true
 
-      - name: Get release assets
-        id: assets
-        run: |
-          # Find .dmg file
-          dmg_file=$(find src-tauri/target/release/bundle/macos -name "*.dmg" | head -1)
-          if [ -f "$dmg_file" ]; then
-            echo "dmg=$(basename $dmg_file)" >> $GITHUB_OUTPUT
-            echo "dmg_path=$dmg_file" >> $GITHUB_OUTPUT
-          fi
+  #     - name: Get release assets
+  #       id: assets
+  #       run: |
+  #         # Find .dmg file
+  #         dmg_file=$(find src-tauri/target/release/bundle/macos -name "*.dmg" | head -1)
+  #         if [ -f "$dmg_file" ]; then
+  #           echo "dmg=$(basename $dmg_file)" >> $GITHUB_OUTPUT
+  #           echo "dmg_path=$dmg_file" >> $GITHUB_OUTPUT
+  #         fi
 
-          # Find .app (as .tar.gz for better distribution)
-          app_file=$(find src-tauri/target/release/bundle/macos -name "*.app" -type d | head -1)
-          if [ -d "$app_file" ]; then
-            cd src-tauri/target/release/bundle/macos
-            tar -czf "app.tar.gz" "$(basename $app_file)"
-            echo "app=app.tar.gz" >> $GITHUB_OUTPUT
-            echo "app_path=src-tauri/target/release/bundle/macos/app.tar.gz" >> $GITHUB_OUTPUT
-          fi
+  #         # Find .app (as .tar.gz for better distribution)
+  #         app_file=$(find src-tauri/target/release/bundle/macos -name "*.app" -type d | head -1)
+  #         if [ -d "$app_file" ]; then
+  #           cd src-tauri/target/release/bundle/macos
+  #           tar -czf "app.tar.gz" "$(basename $app_file)"
+  #           echo "app=app.tar.gz" >> $GITHUB_OUTPUT
+  #           echo "app_path=src-tauri/target/release/bundle/macos/app.tar.gz" >> $GITHUB_OUTPUT
+  #         fi
 
-      - name: Upload DMG to Release
-        if: steps.assets.outputs.dmg != ''
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.assets.outputs.dmg_path }}
-          asset_name: ${{ steps.assets.outputs.dmg }}
-          asset_content_type: application/x-apple-diskimage
+  #     - name: Upload DMG to Release
+  #       if: steps.assets.outputs.dmg != ''
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.create-release.outputs.upload_url }}
+  #         asset_path: ${{ steps.assets.outputs.dmg_path }}
+  #         asset_name: ${{ steps.assets.outputs.dmg }}
+  #         asset_content_type: application/x-apple-diskimage
 
-      - name: Upload APP to Release
-        if: steps.assets.outputs.app != ''
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.assets.outputs.app_path }}
-          asset_name: ${{ steps.assets.outputs.app }}
-          asset_content_type: application/gzip
+  #     - name: Upload APP to Release
+  #       if: steps.assets.outputs.app != ''
+  #       uses: actions/upload-release-asset@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         upload_url: ${{ needs.create-release.outputs.upload_url }}
+  #         asset_path: ${{ steps.assets.outputs.app_path }}
+  #         asset_name: ${{ steps.assets.outputs.app }}
+  #         asset_content_type: application/gzip
 
   build-linux:
-    name: Build Linux
-    needs: create-release
+    name: Build Linux (DISABLED)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-unknown-linux-gnu
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            curl \
-            wget \
-            file \
-            libssl-dev \
-            libgtk-3-dev \
-            libayatana-appindicator3-dev \
-            librsvg2-dev
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run package linux
-        env:
-          CI: true
-
-      - name: Get release assets
-        id: assets
-        run: |
-          # Find .AppImage file
-          appimage_file=$(find src-tauri/target/release/bundle/appimage -name "*.AppImage" | head -1)
-          if [ -f "$appimage_file" ]; then
-            echo "appimage=$(basename $appimage_file)" >> $GITHUB_OUTPUT
-            echo "appimage_path=$appimage_file" >> $GITHUB_OUTPUT
-          fi
-
-          # Find .deb file
-          deb_file=$(find src-tauri/target/release/bundle/deb -name "*.deb" | head -1)
-          if [ -f "$deb_file" ]; then
-            echo "deb=$(basename $deb_file)" >> $GITHUB_OUTPUT
-            echo "deb_path=$deb_file" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Upload AppImage to Release
-        if: steps.assets.outputs.appimage != ''
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.assets.outputs.appimage_path }}
-          asset_name: ${{ steps.assets.outputs.appimage }}
-          asset_content_type: application/octet-stream
-
-      - name: Upload DEB to Release
-        if: steps.assets.outputs.deb != ''
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.assets.outputs.deb_path }}
-          asset_name: ${{ steps.assets.outputs.deb }}
-          asset_content_type: application/x-deb
+      - name: Skipped
+        run: echo "Linux build temporarily disabled for testing"
