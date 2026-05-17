@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(cargo check *)",
+      "Bash(chmod +x D:/personal/code/project/oh-my-file/scripts/*.sh)"
+    ]
+  }
+}

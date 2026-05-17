@@ -1,0 +1,264 @@
+:root {
+  color: #172133;
+  background:
+    radial-gradient(circle at top left, rgba(67, 122, 255, 0.16), transparent 28%),
+    radial-gradient(circle at right center, rgba(43, 209, 157, 0.14), transparent 20%),
+    linear-gradient(180deg, #f7faff 0%, #eef3f8 100%);
+  font-family: 'Segoe UI', 'PingFang SC', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100vh;
+}
+
+body {
+  color: #172133;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 20px;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.app-sidebar,
+.app-main {
+  min-height: 0;
+}
+
+.qr-card,
+.transfer-panel,
+.status-bar {
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 18px 40px rgba(24, 39, 75, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.qr-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 24px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(240, 246, 255, 0.95));
+}
+
+.eyebrow {
+  color: #4b6496;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.qr-card h1,
+.transfer-panel h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.qr-image-wrap {
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  border-radius: 22px;
+  background: #fff;
+}
+
+.network-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.network-select {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #d6deee;
+  border-radius: 14px;
+  background: #fff;
+  color: #20304a;
+}
+
+.qr-image {
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.server-url {
+  margin: 0;
+  color: #20304a;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.muted {
+  margin: 0;
+  color: #637594;
+}
+
+.transfer-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px dashed rgba(100, 125, 167, 0.35);
+  background: rgba(245, 248, 255, 0.8);
+  text-align: center;
+}
+
+.transfer-list {
+  display: grid;
+  gap: 16px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.transfer-item {
+  padding: 18px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 12px 26px rgba(21, 38, 69, 0.08);
+}
+
+.transfer-item__header,
+.transfer-item__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.transfer-item__header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.transfer-item__header p,
+.transfer-meta,
+.transfer-error {
+  margin: 4px 0 0;
+}
+
+.transfer-progress {
+  overflow: hidden;
+  height: 12px;
+  margin: 14px 0;
+  border-radius: 999px;
+  background: #e7edf6;
+}
+
+.transfer-progress__value {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2473ff, #2fd0aa);
+  transition: width 0.2s ease;
+}
+
+.ghost-button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  background: #edf3ff;
+  color: #1f4cb8;
+}
+
+.transfer-meta {
+  color: #5a6c89;
+  font-size: 13px;
+}
+
+.transfer-error {
+  color: #b33d45;
+  font-size: 13px;
+}
+
+.status-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.status-pill {
+  font-weight: 700;
+}
+
+.status-pill.running {
+  color: #198754;
+}
+
+.status-pill.starting {
+  color: #1f6feb;
+}
+
+.status-pill.error {
+  color: #c53b43;
+}
+
+@media (max-width: 960px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .network-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-bar {
+    flex-direction: column;
+  }
+}

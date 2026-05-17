@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>oh-my-file 传输</title>
+    <link rel="stylesheet" href="/style.css?token=__TOKEN__" />
+  </head>
+  <body>
+    <main class="mobile-shell">
+      <header class="hero">
+        <p class="eyebrow">oh-my-file</p>
+        <h1>把文件直接发到这台电脑</h1>
+        <p id="server-name" class="hero-copy">正在连接传输服务...</p>
+      </header>
+
+      <label class="picker-button">
+        <input id="file-input" type="file" multiple hidden />
+        选择文件
+      </label>
+
+      <section id="upload-list" class="upload-list"></section>
+    </main>
+    <script src="/app.js?token=__TOKEN__"></script>
+  </body>
+</html>
