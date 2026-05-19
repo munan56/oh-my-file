@@ -54,42 +54,21 @@ jobs:
         id: assets
         shell: bash
         run: |
-          # Get version from tag and timestamp
           VERSION=${GITHUB_REF#refs/tags/}
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           SUFFIX="${VERSION}-${TIMESTAMP}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          # Find .msi file
-          msi_file=$(find src-tauri/target/release/bundle -name "*.msi" 2>/dev/null | head -1)
-          if [ -f "$msi_file" ]; then
-            msi_name="oh-my-file-${SUFFIX}.msi"
-            cp "$msi_file" /tmp/"$msi_name"
-            echo "msi=$msi_name" >> $GITHUB_OUTPUT
-            echo "msi_path=/tmp/$msi_name" >> $GITHUB_OUTPUT
-            echo "Found MSI: $msi_file"
-          fi
+          echo "=== Windows Build Artifacts ==="
+          find src-tauri/target/release/bundle/nsis -type f
 
-          # Find .exe file (prefer standalone .exe over setup)
-          exe_file=$(find src-tauri/target/release/bundle -name "*-setup.exe" 2>/dev/null | head -1)
+          # Find and copy .exe
+          exe_file=$(find src-tauri/target/release/bundle/nsis -name "*.exe" | head -1)
           if [ -f "$exe_file" ]; then
-            exe_name="oh-my-file-${SUFFIX}-setup.exe"
+            exe_name="oh-my-file-${SUFFIX}.exe"
             cp "$exe_file" /tmp/"$exe_name"
             echo "exe=$exe_name" >> $GITHUB_OUTPUT
             echo "exe_path=/tmp/$exe_name" >> $GITHUB_OUTPUT
-            echo "Found EXE: $exe_file"
           fi
-
-      - name: Upload MSI to Release
-        if: steps.assets.outputs.msi != ''
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.assets.outputs.msi_path }}
-          asset_name: ${{ steps.assets.outputs.msi }}
-          asset_content_type: application/x-msi
 
       - name: Upload EXE to Release
         if: steps.assets.outputs.exe != ''
@@ -132,19 +111,20 @@ jobs:
         id: assets
         shell: bash
         run: |
-          # Get version from tag and timestamp
           VERSION=${GITHUB_REF#refs/tags/}
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           SUFFIX="${VERSION}-${TIMESTAMP}"
 
-          # Find .dmg file
-          dmg_file=$(find src-tauri/target/release/bundle -name "*.dmg" 2>/dev/null | head -1)
+          echo "=== macOS Build Artifacts ==="
+          find src-tauri/target/release/bundle/macos -type f
+
+          # Find and copy .dmg
+          dmg_file=$(find src-tauri/target/release/bundle/macos -name "*.dmg" | head -1)
           if [ -f "$dmg_file" ]; then
             dmg_name="oh-my-file-${SUFFIX}.dmg"
             cp "$dmg_file" /tmp/"$dmg_name"
             echo "dmg=$dmg_name" >> $GITHUB_OUTPUT
             echo "dmg_path=/tmp/$dmg_name" >> $GITHUB_OUTPUT
-            echo "Found DMG: $dmg_file"
           fi
 
       - name: Upload DMG to Release
@@ -202,29 +182,29 @@ jobs:
         id: assets
         shell: bash
         run: |
-          # Get version from tag and timestamp
           VERSION=${GITHUB_REF#refs/tags/}
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           SUFFIX="${VERSION}-${TIMESTAMP}"
 
-          # Find .deb file
-          deb_file=$(find src-tauri/target/release/bundle -name "*.deb" 2>/dev/null | head -1)
+          echo "=== Linux Build Artifacts ==="
+          find src-tauri/target/release/bundle/linux -type f
+
+          # Find and copy .deb
+          deb_file=$(find src-tauri/target/release/bundle/linux -name "*.deb" | head -1)
           if [ -f "$deb_file" ]; then
             deb_name="oh-my-file-${SUFFIX}.deb"
             cp "$deb_file" /tmp/"$deb_name"
             echo "deb=$deb_name" >> $GITHUB_OUTPUT
             echo "deb_path=/tmp/$deb_name" >> $GITHUB_OUTPUT
-            echo "Found DEB: $deb_file"
           fi
 
-          # Find .AppImage file
-          appimage_file=$(find src-tauri/target/release/bundle -name "*.AppImage" 2>/dev/null | head -1)
+          # Find and copy .AppImage
+          appimage_file=$(find src-tauri/target/release/bundle/linux -name "*.AppImage" | head -1)
           if [ -f "$appimage_file" ]; then
             appimage_name="oh-my-file-${SUFFIX}.AppImage"
             cp "$appimage_file" /tmp/"$appimage_name"
             echo "appimage=$appimage_name" >> $GITHUB_OUTPUT
             echo "appimage_path=/tmp/$appimage_name" >> $GITHUB_OUTPUT
-            echo "Found AppImage: $appimage_file"
           fi
 
       - name: Upload DEB to Release
