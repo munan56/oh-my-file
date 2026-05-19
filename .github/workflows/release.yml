@@ -54,15 +54,19 @@ jobs:
         id: assets
         shell: bash
         run: |
+          # Debug: show directory structure
+          echo "=== Bundle directory structure ==="
+          find src-tauri/target/release/bundle -type f | head -20
+
           # Find .msi file
-          msi_file=$(find src-tauri/target/release/bundle/nsis -name "*.msi" | head -1)
+          msi_file=$(find src-tauri/target/release/bundle -name "*.msi" 2>/dev/null | head -1)
           if [ -f "$msi_file" ]; then
             echo "msi=$(basename $msi_file)" >> $GITHUB_OUTPUT
             echo "msi_path=$msi_file" >> $GITHUB_OUTPUT
           fi
 
           # Find .exe file
-          exe_file=$(find src-tauri/target/release/bundle/nsis -name "*.exe" | grep -v "installers" | head -1)
+          exe_file=$(find src-tauri/target/release/bundle -name "*.exe" -not -path "*installers*" 2>/dev/null | head -1)
           if [ -f "$exe_file" ]; then
             echo "exe=$(basename $exe_file)" >> $GITHUB_OUTPUT
             echo "exe_path=$exe_file" >> $GITHUB_OUTPUT
@@ -120,8 +124,12 @@ jobs:
         id: assets
         shell: bash
         run: |
+          # Debug: show directory structure
+          echo "=== Bundle directory structure ==="
+          find src-tauri/target/release/bundle -type f | head -20
+
           # Find .dmg file
-          dmg_file=$(find src-tauri/target/release/bundle/macos -name "*.dmg" | head -1)
+          dmg_file=$(find src-tauri/target/release/bundle -name "*.dmg" 2>/dev/null | head -1)
           if [ -f "$dmg_file" ]; then
             echo "dmg=$(basename $dmg_file)" >> $GITHUB_OUTPUT
             echo "dmg_path=$dmg_file" >> $GITHUB_OUTPUT
@@ -159,7 +167,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+          sudo apt-get install -y build-essential libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libsoup-3.0-dev
 
       - name: Install dependencies
         run: npm ci
