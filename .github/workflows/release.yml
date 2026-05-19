@@ -54,6 +54,12 @@ jobs:
         id: assets
         shell: bash
         run: |
+          # Get version from tag and timestamp
+          VERSION=${GITHUB_REF#refs/tags/}
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          SUFFIX="${VERSION}-${TIMESTAMP}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
           # Debug: show directory structure
           echo "=== Bundle directory structure ==="
           find src-tauri/target/release/bundle -type f | head -20
@@ -61,15 +67,19 @@ jobs:
           # Find .msi file
           msi_file=$(find src-tauri/target/release/bundle -name "*.msi" 2>/dev/null | head -1)
           if [ -f "$msi_file" ]; then
-            echo "msi=$(basename $msi_file)" >> $GITHUB_OUTPUT
-            echo "msi_path=$msi_file" >> $GITHUB_OUTPUT
+            msi_name="oh-my-file-${SUFFIX}.msi"
+            cp "$msi_file" "$msi_name"
+            echo "msi=$msi_name" >> $GITHUB_OUTPUT
+            echo "msi_path=$msi_name" >> $GITHUB_OUTPUT
           fi
 
           # Find .exe file
           exe_file=$(find src-tauri/target/release/bundle -name "*.exe" -not -path "*installers*" 2>/dev/null | head -1)
           if [ -f "$exe_file" ]; then
-            echo "exe=$(basename $exe_file)" >> $GITHUB_OUTPUT
-            echo "exe_path=$exe_file" >> $GITHUB_OUTPUT
+            exe_name="oh-my-file-${SUFFIX}.exe"
+            cp "$exe_file" "$exe_name"
+            echo "exe=$exe_name" >> $GITHUB_OUTPUT
+            echo "exe_path=$exe_name" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload MSI to Release
@@ -124,6 +134,11 @@ jobs:
         id: assets
         shell: bash
         run: |
+          # Get version from tag and timestamp
+          VERSION=${GITHUB_REF#refs/tags/}
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          SUFFIX="${VERSION}-${TIMESTAMP}"
+
           # Debug: show directory structure
           echo "=== Bundle directory structure ==="
           find src-tauri/target/release/bundle -type f | head -20
@@ -131,8 +146,10 @@ jobs:
           # Find .dmg file
           dmg_file=$(find src-tauri/target/release/bundle -name "*.dmg" 2>/dev/null | head -1)
           if [ -f "$dmg_file" ]; then
-            echo "dmg=$(basename $dmg_file)" >> $GITHUB_OUTPUT
-            echo "dmg_path=$dmg_file" >> $GITHUB_OUTPUT
+            dmg_name="oh-my-file-${SUFFIX}.dmg"
+            cp "$dmg_file" "$dmg_name"
+            echo "dmg=$dmg_name" >> $GITHUB_OUTPUT
+            echo "dmg_path=$dmg_name" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload DMG to Release
@@ -181,18 +198,31 @@ jobs:
         id: assets
         shell: bash
         run: |
+          # Get version from tag and timestamp
+          VERSION=${GITHUB_REF#refs/tags/}
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          SUFFIX="${VERSION}-${TIMESTAMP}"
+
+          # Debug: show directory structure
+          echo "=== Bundle directory structure ==="
+          find src-tauri/target/release/bundle -type f | head -20
+
           # Find .deb file
           deb_file=$(find src-tauri/target/release/bundle/linux -name "*.deb" | head -1)
           if [ -f "$deb_file" ]; then
-            echo "deb=$(basename $deb_file)" >> $GITHUB_OUTPUT
-            echo "deb_path=$deb_file" >> $GITHUB_OUTPUT
+            deb_name="oh-my-file-${SUFFIX}.deb"
+            cp "$deb_file" "$deb_name"
+            echo "deb=$deb_name" >> $GITHUB_OUTPUT
+            echo "deb_path=$deb_name" >> $GITHUB_OUTPUT
           fi
 
           # Find .AppImage file
           appimage_file=$(find src-tauri/target/release/bundle/linux -name "*.AppImage" | head -1)
           if [ -f "$appimage_file" ]; then
-            echo "appimage=$(basename $appimage_file)" >> $GITHUB_OUTPUT
-            echo "appimage_path=$appimage_file" >> $GITHUB_OUTPUT
+            appimage_name="oh-my-file-${SUFFIX}.AppImage"
+            cp "$appimage_file" "$appimage_name"
+            echo "appimage=$appimage_name" >> $GITHUB_OUTPUT
+            echo "appimage_path=$appimage_name" >> $GITHUB_OUTPUT
           fi
 
       - name: Upload DEB to Release
