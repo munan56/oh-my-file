@@ -30,26 +30,20 @@
       "deb",
       "appimage"
     ],
-    "appimage": {
-      "bundleAppImage": true
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "signingIdentity": null,
+      "timestampUrl": ""
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.13",
+      "signingIdentity": null,
+      "entitlements": null,
+      "providerShortTeamId": null
     },
     "linux": {
-      "icons": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/256x256.png"
-      ]
-    },
-    "windows": [
-      {
-        "width": 800,
-        "height": 600
-      }
-    ],
-    "macOS": [
-      {
-        "minimumSystemVersion": "10.13"
-      }
-    ]
+      "linuxMenu": {}
+    }
   }
 }
