@@ -33,17 +33,12 @@
     "windows": {
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
-      "signingIdentity": null,
       "timestampUrl": ""
     },
     "macOS": {
       "minimumSystemVersion": "10.13",
       "signingIdentity": null,
-      "entitlements": null,
-      "providerShortTeamId": null
-    },
-    "linux": {
-      "linuxMenu": {}
+      "entitlements": null
     }
   }
 }
